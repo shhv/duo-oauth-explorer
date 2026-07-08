@@ -108,3 +108,25 @@ Frontend (Vite, :5174) → Backend (Express, :3001) → Duo Cloud
 ```
 
 The frontend proxies API calls through Vite's dev server proxy. The backend handles all OAuth flows, stores tokens in session, and exposes APIs for the frontend to inspect tokens, test scopes, etc.
+
+## Learning Guide
+
+The app includes a **Guided Experiments** page (`/experiments`) with step-by-step exercises. Here's the summary:
+
+### What OAuth 2.1 adds over Generic OIDC
+
+| Concept | What it means | How to see it |
+|---------|--------------|---------------|
+| **Resource Indicators** | Token `aud` = your API URL, not just client ID | Compare Token Inspector in both modes |
+| **Group → Scope Policy** | Different users get different permissions | Login as different group members, check Scopes tab |
+| **Client Credentials** | Machine tokens with no user identity | Client Creds tab — notice missing sub/name/email |
+| **Dynamic Client Registration** | Create OAuth clients via API | DCR tab — register + immediately use the new client |
+| **Custom Scopes** | App-specific permissions beyond openid/profile/email | Scopes tab shows granted custom scopes |
+
+### The Core Insight
+
+**Generic OIDC** answers: *"Who is this user?"* (authentication)
+
+**OAuth 2.1** answers: *"Who is this user AND what are they allowed to do?"* (authentication + authorization)
+
+The token itself carries the authorization decision. Your API checks the `scope` claim — no need to call back to Duo on every request.

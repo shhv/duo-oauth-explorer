@@ -66,6 +66,10 @@ export default function Home() {
         <a href="/compare" style={styles.link} onClick={(e) => { e.preventDefault(); navigate('/compare'); }}>
           View feature comparison →
         </a>
+        <span style={{ margin: '0 12px', color: '#475569' }}>|</span>
+        <a href="/experiments" style={styles.link} onClick={(e) => { e.preventDefault(); navigate('/experiments'); }}>
+          Guided experiments →
+        </a>
       </nav>
     </div>
   );

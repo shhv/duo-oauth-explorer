@@ -12,9 +12,18 @@ const styles = {
   },
   tabActive: { background: '#475569', color: '#e2e8f0' },
   raw: { wordBreak: 'break-all', fontSize: 11, color: '#64748b' },
+  edu: {
+    background: '#0f172a', borderRadius: 8, padding: 12, marginBottom: 16,
+    borderLeft: '3px solid #3b82f6', fontSize: 12, color: '#94a3b8', lineHeight: 1.6,
+  },
 };
 
 import { useState } from 'react';
+
+const EDU = {
+  id_token: 'The ID Token is for YOUR app — it proves who the user is. Its "aud" is your client_id because it was issued for you. Never send this to an API.',
+  access_token: 'The Access Token is for the RESOURCE SERVER (API) — it proves what the user can do. In OAuth 2.1, its "aud" is the resource URL. In OIDC, it\'s the client_id.',
+};
 
 export default function TokenInspector({ tokens }) {
   const [viewing, setViewing] = useState('id_token');
@@ -37,6 +46,8 @@ export default function TokenInspector({ tokens }) {
           </button>
         ))}
       </div>
+
+      <div style={styles.edu}>{EDU[viewing]}</div>
 
       {decoded ? (
         <>
