@@ -1,15 +1,18 @@
 import { getIntegrationConfig } from '../config.js';
 
-export async function exchangeCode(mode, code, codeVerifier) {
+export async function exchangeCode(mode, code, codeVerifier, opts = {}) {
   const cfg = getIntegrationConfig(mode);
   const params = new URLSearchParams({
     grant_type: 'authorization_code',
     code,
     redirect_uri: cfg.redirectUri,
-    client_id: cfg.clientId,
-    client_secret: cfg.clientSecret,
+    client_id: opts.clientId || cfg.clientId,
     code_verifier: codeVerifier,
   });
+
+  if (!opts.pkceOnly) {
+    params.set('client_secret', cfg.clientSecret);
+  }
 
   if (cfg.resource) {
     params.set('resource', cfg.resource);

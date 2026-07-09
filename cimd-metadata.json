@@ -1,0 +1,5 @@
+{
+  "client_name": "DuoExplorer-CIMD",
+  "client_id": "https://raw.githubusercontent.com/shhv_cisco/duo-oauth-explorer/feat/duo-oauth-explorer/cimd-metadata.json",
+  "redirect_uris": ["http://localhost:3001/auth/callback/oauth21"]
+}

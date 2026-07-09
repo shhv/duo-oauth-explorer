@@ -64,7 +64,27 @@ export default function DCRPanel() {
 
       {error && <p style={styles.error}>{error}</p>}
       {result && (
-        <pre style={styles.pre}>{JSON.stringify(result, null, 2)}</pre>
+        <>
+          <pre style={styles.pre}>{JSON.stringify(result, null, 2)}</pre>
+          {result.client_id && (
+            <div style={{ marginTop: 12 }}>
+              <p style={{ ...styles.note, marginBottom: 8 }}>
+                DCR creates a <strong>public client</strong> (no secret). It can only be used with
+                Authorization Code + PKCE — not client credentials. Try logging in with it:
+              </p>
+              <button
+                style={styles.btn}
+                onClick={async () => {
+                  const res = await fetch(`/auth/login/oauth21?dcr_client_id=${result.client_id}`, { credentials: 'include' });
+                  const { url } = await res.json();
+                  window.location.href = url;
+                }}
+              >
+                Login with this DCR client
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

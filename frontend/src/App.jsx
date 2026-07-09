@@ -3,6 +3,7 @@ import Home from './pages/Home.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Compare from './pages/Compare.jsx';
 import Experiments from './pages/Experiments.jsx';
+import Tools from './pages/Tools.jsx';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="/experiments" element={<Experiments />} />
+        <Route path="/tools" element={<Tools />} />
       </Routes>
     </BrowserRouter>
   );

@@ -27,9 +27,6 @@ dcrRouter.post('/dcr', requireAuth, async (req, res) => {
       body: JSON.stringify({
         client_name: client_name || 'DuoExplorer-Dynamic-Client',
         redirect_uris: redirect_uris || [config.oauth21.redirectUri],
-        grant_types: grant_types || ['authorization_code'],
-        response_types: ['code'],
-        token_endpoint_auth_method: 'client_secret_basic',
       }),
     });
 
@@ -56,4 +53,39 @@ dcrRouter.post('/client-credentials', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+dcrRouter.post('/agent-test/:endpoint', (req, res) => {
+  const { token } = req.body;
+  const { endpoint } = req.params;
+  if (!token) return res.status(400).json({ error: 'No token provided' });
+
+  const decoded = decodeJwt(token);
+  const scopes = decoded?.payload?.scope?.split(' ') || [];
+
+  const scopeMap = {
+    'read-reports': 'read:reports',
+    'write-reports': 'write:reports',
+    'admin-manage': 'admin:manage',
+  };
+
+  const required = scopeMap[endpoint];
+  if (!required) return res.status(404).json({ error: 'Unknown endpoint' });
+
+  if (!scopes.includes(required)) {
+    return res.status(403).json({
+      error: 'insufficient_scope',
+      message: `Agent does not have "${required}" scope`,
+      agent_has: scopes,
+      required,
+    });
+  }
+
+  const responses = {
+    'read-reports': { data: [{ id: 1, title: 'Q1 Report' }, { id: 2, title: 'Q2 Report' }], agent: true },
+    'write-reports': { message: 'Report created by agent', agent: true },
+    'admin-manage': { message: 'Admin operation completed by agent', agent: true },
+  };
+
+  res.json({ success: true, scope_used: required, ...responses[endpoint] });
 });

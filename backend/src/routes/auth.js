@@ -10,15 +10,21 @@ authRouter.get('/login/:mode', (req, res) => {
   const { mode } = req.params;
   const cfg = getIntegrationConfig(mode);
   const { verifier, challenge } = generatePKCE();
+  const dcrClientId = req.query.dcr_client_id;
 
   req.session.pkceVerifier = verifier;
   req.session.authMode = mode;
+  req.session.dcrClientId = dcrClientId || null;
+
+  const scopes = mode === 'oauth21'
+    ? 'openid profile email offline_access read:reports write:reports admin:manage'
+    : 'openid profile email offline_access';
 
   const params = new URLSearchParams({
     response_type: 'code',
-    client_id: cfg.clientId,
+    client_id: dcrClientId || cfg.clientId,
     redirect_uri: cfg.redirectUri,
-    scope: 'openid profile email offline_access',
+    scope: scopes,
     code_challenge: challenge,
     code_challenge_method: 'S256',
     state: mode,
@@ -46,10 +52,14 @@ authRouter.get('/callback/:mode', async (req, res) => {
   }
 
   try {
-    const tokenResponse = await exchangeCode(mode, code, req.session.pkceVerifier);
+    const opts = req.session.dcrClientId
+      ? { clientId: req.session.dcrClientId, pkceOnly: true }
+      : {};
+    const tokenResponse = await exchangeCode(mode, code, req.session.pkceVerifier, opts);
     req.session.tokens = tokenResponse;
     req.session.mode = mode;
     delete req.session.pkceVerifier;
+    delete req.session.dcrClientId;
 
     res.redirect(`${config.frontendUrl}/dashboard`);
   } catch (err) {

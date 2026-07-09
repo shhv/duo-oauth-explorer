@@ -8,6 +8,7 @@ import IntrospectPanel from '../components/IntrospectPanel.jsx';
 import ScopePanel from '../components/ScopePanel.jsx';
 import DCRPanel from '../components/DCRPanel.jsx';
 import ClientCredPanel from '../components/ClientCredPanel.jsx';
+import AgentLoginPanel from '../components/AgentLoginPanel.jsx';
 
 const styles = {
   container: { maxWidth: 1100, margin: '0 auto', padding: '32px 24px' },
@@ -35,6 +36,7 @@ const TABS = [
   { id: 'userinfo', label: 'UserInfo' },
   { id: 'introspect', label: 'Introspect' },
   { id: 'scopes', label: 'Scopes', oauth21Only: true },
+  { id: 'agent', label: 'Agent Login', oauth21Only: true },
   { id: 'dcr', label: 'DCR', oauth21Only: true },
   { id: 'clientcred', label: 'Client Creds', oauth21Only: true },
 ];
@@ -106,6 +108,7 @@ export default function Dashboard() {
         {activeTab === 'userinfo' && <UserInfoPanel />}
         {activeTab === 'introspect' && <IntrospectPanel />}
         {activeTab === 'scopes' && <ScopePanel />}
+        {activeTab === 'agent' && <AgentLoginPanel />}
         {activeTab === 'dcr' && <DCRPanel />}
         {activeTab === 'clientcred' && <ClientCredPanel />}
       </div>

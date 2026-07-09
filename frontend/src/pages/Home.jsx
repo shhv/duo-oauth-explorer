@@ -26,7 +26,7 @@ export default function Home() {
   const error = params.get('error');
 
   async function login(mode) {
-    const res = await fetch(`/auth/login/${mode}`);
+    const res = await fetch(`/auth/login/${mode}`, { credentials: 'include' });
     const { url } = await res.json();
     window.location.href = url;
   }
@@ -69,6 +69,10 @@ export default function Home() {
         <span style={{ margin: '0 12px', color: '#475569' }}>|</span>
         <a href="/experiments" style={styles.link} onClick={(e) => { e.preventDefault(); navigate('/experiments'); }}>
           Guided experiments →
+        </a>
+        <span style={{ margin: '0 12px', color: '#475569' }}>|</span>
+        <a href="/tools" style={styles.link} onClick={(e) => { e.preventDefault(); navigate('/tools'); }}>
+          Agent Login & DCR →
         </a>
       </nav>
     </div>

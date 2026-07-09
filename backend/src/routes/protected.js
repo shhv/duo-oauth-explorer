@@ -4,10 +4,17 @@ import { decodeJwt } from '../utils/jwt.js';
 
 export const protectedRouter = Router();
 
+function getScopes(session) {
+  const decoded = decodeJwt(session.tokens.access_token);
+  const fromJwt = decoded?.payload?.scope?.split(' ') || [];
+  const fromResponse = session.tokens.scope?.split(' ') || [];
+  const combined = [...new Set([...fromJwt, ...fromResponse])];
+  return combined;
+}
+
 function requireScope(scope) {
   return (req, res, next) => {
-    const decoded = decodeJwt(req.session.tokens.access_token);
-    const tokenScopes = decoded?.payload?.scope?.split(' ') || [];
+    const tokenScopes = getScopes(req.session);
     if (!tokenScopes.includes(scope)) {
       return res.status(403).json({
         error: 'insufficient_scope',
@@ -46,8 +53,7 @@ protectedRouter.post('/admin-manage', requireScope('admin:manage'), (req, res) =
 });
 
 protectedRouter.get('/test-all', (req, res) => {
-  const decoded = decodeJwt(req.session.tokens.access_token);
-  const tokenScopes = decoded?.payload?.scope?.split(' ') || [];
+  const tokenScopes = getScopes(req.session);
   const allScopes = ['read:reports', 'write:reports', 'admin:manage'];
 
   const results = allScopes.map((scope) => ({
@@ -55,5 +61,10 @@ protectedRouter.get('/test-all', (req, res) => {
     granted: tokenScopes.includes(scope),
   }));
 
-  res.json({ scopes: results, raw_scope: decoded?.payload?.scope });
+  const decoded = decodeJwt(req.session.tokens.access_token);
+  res.json({
+    scopes: results,
+    jwt_scope: decoded?.payload?.scope || null,
+    response_scope: req.session.tokens.scope || null,
+  });
 });
