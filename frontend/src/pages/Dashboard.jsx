@@ -83,6 +83,7 @@ export default function Dashboard() {
           }}>
             {mode === 'oauth21' ? 'OAuth 2.1' : 'Generic OIDC'}
           </span>
+          <button style={styles.btn} onClick={() => navigate('/')}>Home</button>
           <button style={styles.btn} onClick={() => navigate('/compare')}>Compare</button>
           <button style={styles.btn} onClick={() => navigate('/experiments')}>Experiments</button>
           <button style={styles.btn} onClick={handleLogout}>Logout</button>
