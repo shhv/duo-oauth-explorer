@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AgentLoginPanel from '../components/AgentLoginPanel.jsx';
 import DCRPanel from '../components/DCRPanel.jsx';
 import CIMDPanel from '../components/CIMDPanel.jsx';
+import SCIMPanel from '../components/SCIMPanel.jsx';
 
 const styles = {
   container: { maxWidth: 1100, margin: '0 auto', padding: '32px 24px' },
@@ -73,6 +74,12 @@ export default function Tools() {
         >
           CIMD
         </button>
+        <button
+          style={{ ...styles.tab, ...(activeTab === 'scim' ? styles.tabActive : {}) }}
+          onClick={() => setActiveTab('scim')}
+        >
+          SCIM
+        </button>
       </div>
 
       <div style={styles.panel}>
@@ -94,6 +101,7 @@ export default function Tools() {
           </>
         )}
         {activeTab === 'cimd' && <CIMDPanel />}
+        {activeTab === 'scim' && <SCIMPanel />}
       </div>
     </div>
   );

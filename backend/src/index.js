@@ -7,6 +7,7 @@ import { authRouter } from './routes/auth.js';
 import { tokensRouter } from './routes/tokens.js';
 import { protectedRouter } from './routes/protected.js';
 import { dcrRouter } from './routes/dcr.js';
+import { scimRouter } from './routes/scim.js';
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use('/auth', authRouter);
 app.use('/api', tokensRouter);
 app.use('/api/protected', protectedRouter);
 app.use('/api', dcrRouter);
+app.use('/api', scimRouter);
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 

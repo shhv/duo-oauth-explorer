@@ -72,7 +72,7 @@ export default function Home() {
         </a>
         <span style={{ margin: '0 12px', color: '#475569' }}>|</span>
         <a href="/tools" style={styles.link} onClick={(e) => { e.preventDefault(); navigate('/tools'); }}>
-          Agent Login & DCR →
+          Tools (DCR, CIMD, SCIM) →
         </a>
       </nav>
     </div>
